@@ -7,7 +7,7 @@
     <ProjectGuid>{4488635D-EF8C-4E0D-9486-9DCA0AA94EBA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>silent_printing</RootNamespace>
-    <AssemblyName>silent-printing</AssemblyName>
+    <AssemblyName>print</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
