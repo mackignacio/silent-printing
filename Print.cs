@@ -36,6 +36,7 @@ class Print
             Graphics graphics = e.Graphics;
             Logo(args[0], graphics, new PointF(50, 0));
             Headers(args, width, graphics);
+            InvoiceDetails(args[4], graphics);
         };
     }
 
@@ -74,6 +75,38 @@ class Print
         if (text.Length > 1) graphics.DrawString(text[1], font, Brushes.Black, Position(width, text[1], font, VerticalSpacing(20)));
     }
 
+    private void InvoiceDetails(string args, Graphics graphics)
+    {
+        int resetSpacing = verticalSpacing;
+        string[] names = { "Receipt No. :", "Date Issue :", "Cashier :", "Station :", "Customer :" };
+        SetInvoiceItems(names, 20, graphics, Resources.HelveticaNeueBd, FontStyle.Bold);
+        verticalSpacing = resetSpacing;
+        SetInvoiceItems(SplitInvoiceDetails(args, 6), 100, graphics, Resources.HelveticaNeue, FontStyle.Regular);
+    }
+
+    private void SetInvoiceItems(string[] array, int margin, Graphics graphics, byte[] fontData, FontStyle style, int fontSize = 9)
+    {
+        using (Font font = GetCustomFont(fontData, fontSize, style))
+        {
+            for (int runs = 0; runs < 5; runs++)
+                graphics.DrawString(array[runs], font, Brushes.Black, new PointF(margin, VerticalSpacing(runs == 0 ? 20 : 12)));
+        }
+    }
+
+    private string[] SplitInvoiceDetails(string text, int length)
+    {
+        string[] split = text.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+        List<string> list = new List<string>();
+
+        for (int runs = 0; runs < length; runs++)
+        {
+            string value = split.Length > runs ? split[runs] : "";
+            list.Add(value);
+        }
+
+        return list.ToArray();
+    }
+
     private string[] LimitTextWidth(string text, int length)
     {
         string strlist = "";
@@ -107,7 +140,7 @@ class Print
         return verticalSpacing;
     }
 
-    private PointF Position(int width, string text, Font font, int height, float padding = 0 )
+    private PointF Position(int width, string text, Font font, int height, float padding = 0)
     {
         int textWidth = TextWidth(text, font);
         float center = Center(width, textWidth);
