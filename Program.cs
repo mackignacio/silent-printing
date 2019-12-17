@@ -7,15 +7,16 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace silent_printing
 {
     class Program
     {
-        static int currentSpacing = 0;
+        static int verticalSpacing = 0;
         static void Main(string[] args)
         {
-            Print("EPSON TM-T82II Receipt", "Roll Paper 58 x 297 mm", 280, AddSpacing(5), args);
+            Print("EPSON TM-T82II Receipt", "Roll Paper 58 x 297 mm", 280, VerticalSpacing(5), args);
         }
 
         private static void Print(string printer, string paper, int width, int heigth, string[] args)
@@ -49,10 +50,22 @@ namespace silent_printing
             }
         }
 
-        private static int AddSpacing(int spacing)
+        private static int VerticalSpacing(int spacing)
         {
-            currentSpacing += spacing;
-            return currentSpacing;
+            verticalSpacing += spacing;
+            return verticalSpacing;
+        }
+
+        private static int TextWidht(string text, Font font)
+        { 
+            return TextRenderer.MeasureText(text, font).Width;
+        }
+
+        private static int Center(int widht, int textLength)
+        {
+            int w = (widht / 2);
+            int tl = (textLength / 2);
+            return w - tl;
         }
     }
 }
