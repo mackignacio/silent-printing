@@ -53,9 +53,19 @@ class Print
 
     private void Headers(string[] args, int width, Graphics graphics)
     {
-        string businessName = args[1];
         using (Font headerFont = GetCustomFont(Resources.HelveticaNeueBd, 12, FontStyle.Bold))
-            SetBusinessName(LimitTextWidth(businessName, 20), headerFont, width, graphics);
+            SetBusinessName(LimitTextWidth(args[1], 20), headerFont, width, graphics);
+        using (Font font = GetCustomFont(Resources.HelveticaNeue, 10, FontStyle.Regular))
+        {
+            SetBusinessAddress(LimitTextWidth(args[2], 35), font, width, graphics);
+            graphics.DrawString(args[3], font, Brushes.Black, Position(width, args[3], font, VerticalSpacing(15), 10));
+        }
+    }
+
+    private void SetBusinessAddress(string[] text, Font font, int width, Graphics graphics)
+    {
+        graphics.DrawString(text[0], font, Brushes.Black, Position(width, text[0], font, VerticalSpacing(20), 20));
+        if (text.Length > 1) graphics.DrawString(text[1], font, Brushes.Black, Position(width, text[1], font, VerticalSpacing(15)));
     }
 
     private void SetBusinessName(string[] text, Font font, int width, Graphics graphics)
@@ -97,9 +107,11 @@ class Print
         return verticalSpacing;
     }
 
-    private PointF Position(int width, string text, Font font, int height)
+    private PointF Position(int width, string text, Font font, int height, float padding = 0 )
     {
-        return new PointF(Center(width, TextWidth(text, font)), height);
+        int textWidth = TextWidth(text, font);
+        float center = Center(width, textWidth);
+        return new PointF(center + padding, height);
     }
 
     private int TextWidth(string text, Font font)
