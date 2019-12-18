@@ -7,7 +7,7 @@
     <ProjectGuid>{4488635D-EF8C-4E0D-9486-9DCA0AA94EBA}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>silent_printing</RootNamespace>
-    <AssemblyName>print</AssemblyName>
+    <AssemblyName>neutronpos</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -39,6 +39,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
