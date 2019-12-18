@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace silent_printing
+﻿namespace silent_printing
 {
     class Program
     {

@@ -1,4 +1,5 @@
-﻿using silent_printing.Properties;
+﻿using Newtonsoft.Json;
+using silent_printing.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -8,8 +9,6 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 class Print
@@ -37,6 +36,7 @@ class Print
             Logo(args[0], graphics, new PointF(50, 0));
             Headers(args, width, graphics);
             InvoiceDetails(args[4], graphics);
+            ItemDetails(args[6], graphics);
             PaymentDetails(args[5], graphics);
             graphics.DrawLine(new Pen(Color.Black, 1), 20, VerticalSpacing(30), 290, VerticalSpacing(0));
         };
@@ -129,9 +129,8 @@ class Print
 
     private void PaymentDetails(string args, Graphics graphics)
     {
-        using (Font font = GetCustomFont(Resources.HelveticaNeueBd, 14, FontStyle.Regular))
-            graphics.DrawString("PAYMENT DETAILS", font, Brushes.Black, new PointF(20, VerticalSpacing(10)));
-
+        VerticalSpacing(5);
+        SetTitle("PAYMENT DETAILS", graphics);
         int resetSpacing = verticalSpacing;
         string[] names = { "Price :", "Tax :", "Total Price :", "Discounts :", "Grand Total :", "Amount :", "Change :" };
         SetItems(names, 50, PaymentNameSpacing, graphics, Resources.HelveticaNeue, FontStyle.Regular, 10);
@@ -141,17 +140,26 @@ class Print
         PaymentSeparatorLines(graphics);
     }
 
+    private void SetTitle(string title, Graphics graphics)
+    {
+        using (Font font = GetCustomFont(Resources.HelveticaNeueBd, 14, FontStyle.Regular))
+        {
+            graphics.DrawString(title, font, Brushes.Black, new PointF(20, VerticalSpacing(15)));
+            graphics.DrawLine(new Pen(Color.Black, 1), 20, VerticalSpacing(22), 290, VerticalSpacing(0));
+        }
+    }
+
     private void PaymentSeparatorLines(Graphics graphics)
     {
         using (Font font = GetCustomFont(Resources.HelveticaNeueBd, 10, FontStyle.Bold))
         {
-            for (int runs = 0; runs < 4; runs++)
+            for (int runs = 0; runs < 3; runs++)
             {
                 if (runs == 0)
-                    graphics.DrawLine(new Pen(Color.Black, 1), 20, VerticalSpacing(22), 290, VerticalSpacing(0));
+                    graphics.DrawLine(new Pen(Color.Black, 2), 50, VerticalSpacing(40), 230, VerticalSpacing(0));
                 if (runs > 0)
                     graphics.DrawLine(new Pen(Color.Black, 2), 50, VerticalSpacing(45), 230, VerticalSpacing(0));
-                if (runs == 3)
+                if (runs == 2)
                     graphics.DrawLine(new Pen(Color.Black, 2), 50, VerticalSpacing(4), 230, VerticalSpacing(0));
             }
         }
@@ -168,7 +176,41 @@ class Print
     }
     private int PaymentNameSpacing(int index)
     {
-        return VerticalSpacing(index % 2 == 0 ? 30 : 15);
+        return VerticalSpacing(index == 0 ? 5 : index % 2 == 0 ? 30 : 15);
+    }
+
+    private void ItemDetails(string args, Graphics graphics)
+    {
+        VerticalSpacing(-10);
+        SetTitle("ITEM DETAILS", graphics);
+        SetItemHeaders(graphics);
+        Item[] json = JsonConvert.DeserializeObject<Item[]>(args);
+        SetItemsDetailsJSON(json, graphics);
+    }
+
+    private void SetItemHeaders(Graphics graphics)
+    {
+        using (Font font = GetCustomFont(Resources.HelveticaNeueBd, 8, FontStyle.Regular))
+        {
+            graphics.DrawString("DESCRIPTION", font, Brushes.Black, new PointF(25, VerticalSpacing(5)));
+            graphics.DrawString("QTY", font, Brushes.Black, new PointF(145, VerticalSpacing(0)));
+            graphics.DrawString("PRICE", font, Brushes.Black, new PointF(220, VerticalSpacing(0)));
+        }
+    }
+
+    private void SetItemsDetailsJSON(Item[] json, Graphics graphics)
+    {
+        for (int runs = 0; runs < json.Length; runs++) SetItemsJSON(json[runs], runs, graphics);
+    }
+
+    private void SetItemsJSON(Item json, int index, Graphics graphics)
+    {
+        using (Font font = GetCustomFont(Resources.HelveticaNeue, 10, FontStyle.Regular))
+        {
+            graphics.DrawString(json.name, font, Brushes.Black, new PointF(30, VerticalSpacing(15)));
+            graphics.DrawString(json.quantity, font, Brushes.Black, new PointF(150, VerticalSpacing(0)));
+            graphics.DrawString(json.price, font, Brushes.Black, new PointF(PaymentNameMargin(190)(index, json.price), VerticalSpacing(0)));
+        }
     }
 
     private string[] LimitTextWidth(string text, int length)
