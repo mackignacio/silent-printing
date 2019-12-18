@@ -1,0 +1,14 @@
+Windows Registry Editor Version 5.00
+[HKEY_CLASSES_ROOT\neutronpos]
+@="URL:neutronpos Protocol"
+"URL Protocol"="neutronpos"
+[HKEY_CLASSES_ROOT\neutronpos\DefaultIcon]
+@="C:\\neutronpos\\neutronpos.exe"
+[HKEY_CLASSES_ROOT\neutronpos\shell]
+[HKEY_CLASSES_ROOT\neutronpos\shell\open]
+[HKEY_CLASSES_ROOT\neutronpos\shell\open\command]
+@="C:\\neutronpos\\neutronpos.exe \"%1\""
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\URLWhitelist]
+"1"="neutronpos://*"
+[HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Google\Chrome\URLWhitelist]
+"1"="neutronpos:*"
