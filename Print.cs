@@ -134,7 +134,7 @@ class Print
         VerticalSpacing(5);
         SetTitle("PAYMENT DETAILS", graphics);
         int resetSpacing = verticalSpacing;
-        string[] names = { "Price :", "Tax :", "Total Price :", "Discounts :", "Grand Total :", "Amount :", "Change :" };
+        string[] names = { "Subtotal :", "Less Discount :", "Total :", "Add Tax :", "Grand Total :", "Amount :", "Change :" };
         SetItems(names, 50, PaymentNameSpacing, graphics, Resources.HelveticaNeue, FontStyle.Regular, 10);
         verticalSpacing = resetSpacing;
         SetItems(SplitInvoiceDetails(args, 7), PaymentNameMargin(150), PaymentNameSpacing, graphics, Resources.HelveticaNeue, FontStyle.Regular, 10);
