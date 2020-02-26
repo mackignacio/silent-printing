@@ -12,13 +12,30 @@ using System.Windows.Forms;
 
 class CreditCard
 {
-    Int32 printType = 0;
+    private Int32 printType = 0;
     private int verticalSpacing = 0;
     private int logoHeight = 0;
-    public CreditCard(string printer, string paper, int width, int height, string[] args)
+    private string printer;
+    private string paper;
+    private readonly int width;
+    private readonly int height;
+    public CreditCard( string _printer, string _paper, int _width, int _height)
     {
+        printer = _printer;
+        paper = _paper;
+        width = _width;
+        height = _height;
         verticalSpacing = height;
+    }
 
+    public void Type(string type)
+    {
+        printType = type == "EMV" ? 0 : 1;
+    }
+
+
+    public void Print(string[] args)
+    {
         using (PrintDocument pd = new PrintDocument())
         {
             pd.PrinterSettings.PrinterName = printer;
@@ -26,11 +43,6 @@ class CreditCard
             pd.PrintPage += PrintPage(args, width);
             pd.Print();
         }
-    }
-
-    public void Type(string type)
-    {
-        printType = (type == "EMV") ? 0 : 1;
     }
 
     private PrintPageEventHandler PrintPage(string[] args, int width)
@@ -190,7 +202,9 @@ class CreditCard
     private void InvoiceDetails(string args, int width, Graphics graphics)
     {
         int resetSpacing = VerticalSpacing(10);
-        string[] names = {  "ACCT :", "APP NAME :", "AID :", "ARQC :", "ENTRY :", "APPROVAL :" };
+        string[] emv = { "ACCT :", "APP NAME :", "AID :", "ARQC :", "ENTRY :", "APPROVAL :" };
+        string[] mgs = { "ACCT :", "EXP :", "ENTRY :", "APPROVAL :" };
+        string[] names = printType == 0 ? emv : mgs;
         SetItems(names, 20, graphics, Resources.HelveticaNeueBd, FontStyle.Bold);
         verticalSpacing = resetSpacing ;
         string[] split = args.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
