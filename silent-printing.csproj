@@ -55,6 +55,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CashDrawer.cs" />
+    <Compile Include="CreditCard.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="Print.cs" />
     <Compile Include="Program.cs" />
