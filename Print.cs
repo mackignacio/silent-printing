@@ -34,12 +34,11 @@ class Print
         return (object sender, PrintPageEventArgs e) =>
         {
             Graphics graphics = e.Graphics;
-            string[] decodedUrl = HttpUtility.UrlDecode(args[0]).Replace("neutronpos:", "").Trim(new char[] { '"' }).Split(new string[] { "\" \"" }, StringSplitOptions.RemoveEmptyEntries);
-            Logo(decodedUrl[0], graphics, new PointF(50, 0));
-            Headers(decodedUrl, width, graphics);
-            InvoiceDetails(decodedUrl[4], graphics);
-            ItemDetails(decodedUrl[6], graphics);
-            PaymentDetails(decodedUrl[5], graphics);
+            Logo(args[0], graphics, new PointF(50, 0));
+            Headers(args, width, graphics);
+            InvoiceDetails(args[4], graphics);
+            ItemDetails(args[6], graphics);
+            PaymentDetails(args[5], graphics);
             graphics.DrawLine(new Pen(Color.Black, 1), 20, VerticalSpacing(30), 290, VerticalSpacing(0));
         };
     }
