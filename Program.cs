@@ -24,7 +24,6 @@ namespace silent_printing
 
             foreach (string printer in System.Drawing.Printing.PrinterSettings.InstalledPrinters)
             {
-                System.Diagnostics.Debug.WriteLine(printer);
                 printer.Contains("EPSON");
 
                 if (printer.Contains("EPSON") || printer.Contains("Receipt"))
@@ -32,7 +31,6 @@ namespace silent_printing
                     printerName = printer;
                 }
 
-                  
             }
 
             if (command == "1" || command == "2")
