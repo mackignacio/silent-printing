@@ -40,8 +40,20 @@ class CreditCard
             Graphics graphics = e.Graphics;
             Logo(args[0], graphics, new PointF(50, 0));
             Headers(args, width, graphics);
-            graphics.DrawLine(new Pen(Color.Black, 1), 20, VerticalSpacing(30), 290, VerticalSpacing(0));
+            DateAndTime(args[4], graphics);
+            Transaction("SALE",  width, graphics);
+            InvoiceDetails(args[5], width, graphics);
+            Signature("I agree to pay above total amount according to card issuer agreement.", width, graphics);
+            Spacer(width, graphics);
         };
+    }
+    private void Spacer( int width, Graphics graphics)
+    {
+        string text = "----------------";
+        using (Font font = GetCustomFont(Resources.HelveticaNeue, 8, FontStyle.Regular))
+        {
+            graphics.DrawString(text, font, Brushes.Black, Position(width, text, font, VerticalSpacing(20)));
+        }
     }
 
     private int VerticalSpacing(int spacing)
@@ -130,5 +142,98 @@ class CreditCard
         if (text.Length > 1) graphics.DrawString(text[1], font, Brushes.Black, Position(width, text[1], font, VerticalSpacing(20)));
     }
 
-}
+    private void SetItems(string[] array, float x, Graphics graphics, byte[] fontData, FontStyle style, int fontSize = 9)
+    {
+        using (Font font = GetCustomFont(fontData, fontSize, style))
+        {
+            for (int runs = 0; runs < array.Length; runs++)
+                graphics.DrawString(array[runs], font, Brushes.Black, new PointF(x, VerticalSpacing(runs == 0 ? 20 : 12)));
+        }
+    }
 
+    private void SetItems(string[] array, Func<int, string, int> x, Func<int, int> y, Graphics graphics, byte[] fontData, FontStyle style, int fontSize = 9)
+    {
+        using (Font font = GetCustomFont(fontData, fontSize, style))
+        {
+            for (int runs = 0; runs < array.Length; runs++)
+                graphics.DrawString(array[runs], font, Brushes.Black, new PointF(x(runs, array[runs]), y(runs)));
+        }
+    }
+
+    private void SetItems(string[] array, float x, Func<int, int> y, Graphics graphics, byte[] fontData, FontStyle style, int fontSize = 9)
+    {
+        using (Font font = GetCustomFont(fontData, fontSize, style))
+        {
+            for (int runs = 0; runs < array.Length; runs++)
+                graphics.DrawString(array[runs], font, Brushes.Black, new PointF(x, y(runs)));
+        }
+    }
+
+    private void DateAndTime(string text, Graphics graphics)
+    {
+        int resetSpacing = verticalSpacing;
+        string[] names = { "DATE :", "TIME :" };
+        SetItems(names, 20, graphics, Resources.HelveticaNeueBd, FontStyle.Bold);
+        verticalSpacing = resetSpacing;
+
+        string[] split = text.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+        List<string> list = new List<string>();
+
+        for (int runs = 0; runs < split.Length; runs++)
+        {
+            list.Add(split[runs]);
+        }
+
+        SetItems(list.ToArray(), 70, graphics, Resources.HelveticaNeue, FontStyle.Regular);
+    }
+
+    private void InvoiceDetails(string args, int width, Graphics graphics)
+    {
+        int resetSpacing = VerticalSpacing(10);
+        string[] names = {  "ACCT :", "APP NAME :", "AID :", "ARQC :", "ENTRY :", "APPROVAL :" };
+        SetItems(names, 20, graphics, Resources.HelveticaNeueBd, FontStyle.Bold);
+        verticalSpacing = resetSpacing ;
+        string[] split = args.Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+        SetItems(SplitInvoiceDetails(split), 120, graphics, Resources.HelveticaNeue, FontStyle.Regular);
+        string total = split[split.Length - 1];
+       
+        using (Font font = GetCustomFont(Resources.HelveticaNeue, 12, FontStyle.Bold))
+        {
+            graphics.DrawString("TOTAL : ", font, Brushes.Black, Position(width, "TOTAL :", font, VerticalSpacing(25), -50));
+            graphics.DrawString("$"+total, font, Brushes.Black, Position(width, total, font, VerticalSpacing(0)));
+        }     
+    }
+
+    private string[] SplitInvoiceDetails(string[] split)
+    {
+        List<string> list = new List<string>();
+
+        for (int runs = 0; runs < split.Length - 1; runs++)
+        {
+            list.Add(split[runs]);
+        }
+
+        return list.ToArray();
+    }
+
+    private void Transaction(string text, int width, Graphics graphics)
+    {
+        using (Font font = GetCustomFont(Resources.HelveticaNeueBd, 12, FontStyle.Bold))
+            graphics.DrawString(text, font, Brushes.Black, Position(width, text, font, VerticalSpacing(25)));
+    }
+
+    private void Signature(string args, int width, Graphics graphics)
+    {
+        using (Font font = GetCustomFont(Resources.HelveticaNeue, 9, FontStyle.Regular))
+        {
+            string[] text = LimitTextWidth(args, 35);
+            graphics.DrawString(text[0], font, Brushes.Black, Position(width , text[0], font, VerticalSpacing(25), 15));
+            if (text.Length > 1) graphics.DrawString(text[1], font, Brushes.Black, Position(width, text[1], font, VerticalSpacing(10)));
+            graphics.DrawLine(new Pen(Color.Black, 1), 20, VerticalSpacing(50), 290, VerticalSpacing(0));
+        }
+
+        string sig = "SIGNATURE";
+        using (Font font = GetCustomFont(Resources.HelveticaNeue, 9, FontStyle.Bold))
+            graphics.DrawString(sig, font, Brushes.Black, Position(width, sig, font, VerticalSpacing(5)));
+    }
+}
