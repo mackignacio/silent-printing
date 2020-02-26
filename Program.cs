@@ -40,7 +40,9 @@ namespace silent_printing
 
             if (command == "3" || command == "4")
             {
-                new CreditCard(printerName, "Roll Paper 58 x 297 mm", 297, 0, options);
+                CreditCard card = new CreditCard(printerName, "Roll Paper 58 x 297 mm", 297, 0 );
+                card.Type(command == "3" ? "EMV": "MGS");
+                card.Print(options);
             }
 
         }
