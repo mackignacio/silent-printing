@@ -15,7 +15,7 @@ namespace silent_printing
 
             CashDrawer cashDrawer = new CashDrawer();
 
-            if (command == "0" || command == "2")
+            if (command == "0" || command == "2" || command == "7" || command == "8" || command == "9")
             {
                 cashDrawer.Open();
             }
@@ -33,7 +33,7 @@ namespace silent_printing
 
             }
 
-            if (command == "1" || command == "2")
+            if (command == "1" || command == "2" )
             {
                 new Print(printerName, "Roll Paper 58 x 297 mm", 297, 0, options);
             }
@@ -45,6 +45,15 @@ namespace silent_printing
                 card.Print(options);
             }
 
+            if (command == "5")
+            {
+                new Print(printerName, "Roll Paper 58 x 297 mm", 297, 0, options);
+            }
+
+            if (command == "6" || command == "7" || command == "8" || command == "9")
+            {
+                new Print(printerName, "Roll Paper 58 x 297 mm", 297, 0, options);
+            }
         }
 
     }
