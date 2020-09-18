@@ -208,9 +208,11 @@ class Print
     {
         using (Font font = GetCustomFont(Resources.HelveticaNeue, 10, FontStyle.Regular))
         {
-            graphics.DrawString(json.name, font, Brushes.Black, new PointF(30, VerticalSpacing(15)));
+            string[] text = LimitTextWidth(json.name, 15);
+            graphics.DrawString(text[0], font, Brushes.Black, new PointF(25, VerticalSpacing(15)));
             graphics.DrawString(json.quantity, font, Brushes.Black, new PointF(150, VerticalSpacing(0)));
             graphics.DrawString(json.price, font, Brushes.Black, new PointF(PaymentNameMargin(190)(index, json.price), VerticalSpacing(0)));
+            if (text.Length > 1) graphics.DrawString(text[1], font, Brushes.Black, new PointF(30, VerticalSpacing(15)));
         }
     }
 
